@@ -4,6 +4,7 @@ import os
 import sys
 import psycopg2
 
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'kirr.settings')
