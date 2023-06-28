@@ -1,7 +1,11 @@
 import random
 
+from django.conf import settings
 
-def make_shortcode(size=6, chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'):
+SHORTCODE_MIN = getattr(settings, "SHORTCODE_MIN", 6)
+
+
+def make_shortcode(size=SHORTCODE_MIN, chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789'):
     return ''.join(random.choice(chars) for _ in range(size))
 
 
