@@ -1,8 +1,9 @@
-from django.http import HttpResponseRedirect
 from django.conf import settings
-
+from django.http import HttpResponseRedirect
 
 DEFAULT_REDIRECT_URL = getattr(settings, "DEFAULT_REDIRECT_URL", "http://www.mirr.co")
+
+
 def wildcard_redirect(request, path=None):
     new_url = DEFAULT_REDIRECT_URL
     if path is not None:

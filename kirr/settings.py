@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,7 +25,7 @@ SECRET_KEY = 'django-insecure-xnrjd615)ze!curm10pf-sn)@xg=u*40re8d5!=!8j0ty=o=eq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['blog.mirr.com','mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
+ALLOWED_HOSTS = ['blog.mirr.com', 'mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
 
 # Application definition
 
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
 
     # custom app
     'shortener',
+    'analytics',
 
 ]
 
@@ -59,12 +61,13 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'kirr.urls'
 ROOT_HOSTCONF = 'kirr.hosts'
 DEFAULT_HOST = 'www'
-DEFAULT_REDIRECT_URL = "http://www.mirr.com:8000"
 
+DEFAULT_REDIRECT_URL = "http://www.mirr.com:8000"
+PARENT_HOST = "mirr.com:8000"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

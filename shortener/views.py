@@ -1,51 +1,52 @@
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404, render
 from django.views import View
 
+from analytics.models import ClickEvent
+
+from .forms import SubmitURLForm
 from .models import KirrURL
 
 
 # Create your views here.
-
-def test_view():
-    return HttpResponse("some stuff")
-
-
-def kirr_redirect_view(request, shortcode=None, *args, **kwargs):  # function based view FBV
-    obj = get_object_or_404(KirrURL, shortcode=shortcode)
-    return HttpResponse(obj.url)
-
-
-class KirrCBView(View):  # class based view CBV
-    def get(self, request, shortcode=None, *args, **kwargs):
-        obj = get_object_or_404(KirrURL, shortcode=shortcode)
-        return HttpResponse(f"hello again {shortcode}".format(shortcode=shortcode))
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        the_form = SubmitURLForm()
+        bg_image = 'https://upload.wikimedia.org/wikipedia/commons/0/05/20100726_Kalamitsi_Beach_Ionian_Sea_Lefkada_island_Greece.jpg'
+        context = {
+            "title": "Mirr.co",
+            "form": the_form,
+            "bg_image": bg_image
+        }
+        return render(request, "shortener/home.html", context)
 
     def post(self, request, *args, **kwargs):
-        return HttpResponse()
+        form = SubmitURLForm(request.POST)
+        context = {
+            "title": "Mirr.co",
+            "form": form
+        }
+        template = "shortener/home.html"
+        if form.is_valid():
+            new_url = form.cleaned_data.get("url")
+            obj, created = KirrURL.objects.get_or_create(url=new_url)
+            context = {
+                "object": obj,
+                "created": created
+            }
+            if created:
+                template = "shortener/success.html"
+            else:
+                template = "shortener/already-exists.html"
+
+        return render(request, template, context)
 
 
-'''
-def kirr_redirect_view(request, shortcode=None, *args, **kwargs):  # function based view FBV
-    print(request.method)
-
-    obj = get_object_or_404(KirrURL, shortcode=shortcode)
-    # obj_url = obj.url
-
-    # NOT RECOMMENDED
-    #
-    # try:
-    #     obj = KirrURL.get(shortcode=shortcode)
-    # except:
-    #     obj = KirrURL.objects.all().first()
-    #
-    # NOT RECOMMENDED
-
-    # obj = None
-    # qs = KirrURL.objects.filter(shortcode__iexact=shortcode.upper())
-    # if qs.exists() and qs.count() == 1:
-    #     obj = qs.first()
-    #     obj_url = obj.url
-
-    return HttpResponse(f"hello {shortcode}".format(shortcode=obj.url))
-'''
+class URLRedirectView(View):  # class based view CBV
+    def get(self, request, shortcode=None, *args, **kwargs):
+        qs = KirrURL.objects.filter(shortcode__iexact=shortcode)
+        if qs.count() != 1 and not qs.exists():
+            raise Http404
+        obj = qs.first()
+        print(ClickEvent.objects.create_event(obj))
+        return HttpResponseRedirect(obj.url)
