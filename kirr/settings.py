@@ -30,7 +30,7 @@ SECRET_KEY = env("SECRETKEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://url-shortener-ochre.vercel.app/', 'blog.mirr.com', 'mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
+ALLOWED_HOSTS = ['.vercel.app', 'mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
 
 # Application definition
 
