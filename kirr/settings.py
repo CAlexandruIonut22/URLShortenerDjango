@@ -30,7 +30,7 @@ SECRET_KEY = env("SECRETKEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['blog.mirr.com', 'mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
+ALLOWED_HOSTS = ['https://url-shortener-ochre.vercel.app/', 'blog.mirr.com', 'mirr.com', 'www.mirr.com', 'www.mirr.co', 'mirr.co']
 
 # Application definition
 
@@ -67,8 +67,8 @@ ROOT_URLCONF = 'kirr.urls'
 ROOT_HOSTCONF = 'kirr.hosts'
 DEFAULT_HOST = 'www'
 
-DEFAULT_REDIRECT_URL = "http://www.mirr.com:8000"
-PARENT_HOST = "mirr.com:8000"
+DEFAULT_REDIRECT_URL = "https://url-shortener-ochre.vercel.app/"
+PARENT_HOST = "url-shortener-ochre.vercel.app/"
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
